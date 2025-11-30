@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | Quiz App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Login</h2>
+
+    <label>Select Role:</label><br>
+    <select id="role">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+    </select><br><br>
+
+    <input id="email" placeholder="Email" /><br><br>
+    <input id="password" type="password" placeholder="Password" /><br><br>
+
+    <button onclick="login()">Login</button>
+    <button onclick="signup()">Sign Up</button>
+
+    <script type="module" src="firebase.js"></script>
+    <script src="login.js"></script>
+    <script>
+    // Initialize Firebase Auth
+    auth.onAuthStateChanged(user => {
+        // If user is logged in already → auto continue
+        if (user) {
+            joinStudentToRoom(user);
+        }
+    });
+
+    function login() {
+        let email = document.getElementById("email").value;
+        let pass = document.getElementById("password").value;
+
+        auth.signInWithEmailAndPassword(email, pass)
+        .then(res => {
+            joinStudentToRoom(res.user);
+        })
+        .catch(err => {
+            alert(err.message);
+        });
+    }
+
+    function joinStudentToRoom(user) {
+        // Read ?room=ABC123 from URL
+        const params = new URLSearchParams(window.location.search);
+        const roomId = params.get("room");
+
+        if (!roomId) {
+            alert("Room ID missing!");
+            return;
+        }
+
+        // Create avatar
+        let avatars = ["😎","😃","😇","🤓","🤖"];
+        let avatar = avatars[Math.floor(Math.random() * avatars.length)];
+
+        // Add student to Firestore
+        db.collection("quizRooms").doc(roomId)
+        .collection("students")
+        .doc(user.uid)
+        .set({
+            name: user.email,
+            avatar: avatar,
+            score: 0
+        })
+        .then(() => {
+            console.log("Student added to room");
+            window.location.href = "quiz-room.html?room=" + roomId;
+        })
+        .catch(err => {
+            alert("Error: " + err.message);
+        });
+    }
+</script>
+
+</body>
+</html>

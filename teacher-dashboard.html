@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h2>Teacher Dashboard</h2>
+
+    <h3>Create Quiz Room</h3>
+    <input id="topic" placeholder="Topic Name"><br><br>
+    <input id="timer" type="number" placeholder="Timer in seconds"><br><br>
+
+    <button onclick="createRoom()">Create Room</button>
+
+    <p id="roomCodeDisplay"></p>
+
+    <script type="module" src="firebase.js"></script>
+    <script src="teacher.js"></script>
+</body>
+</html>

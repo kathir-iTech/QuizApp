@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Questions</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Add Questions to Quiz Room</h2>
+
+<input id="room-code" placeholder="Enter Room Code"><br><br>
+
+<input id="question-text" placeholder="Question Text"><br><br>
+<input id="option1" placeholder="Option 1">
+<input id="option2" placeholder="Option 2">
+<input id="option3" placeholder="Option 3">
+<input id="option4" placeholder="Option 4"><br><br>
+<input id="correct" placeholder="Correct Option"><br><br>
+<input id="timer" type="number" placeholder="Time in seconds"><br><br>
+
+<button onclick="addQuestion()">Add Question</button>
+
+<script type="module" src="firebase.js"></script>
+<script src="teacher-questions.js"></script>
+</body>
+</html>
