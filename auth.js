@@ -1,8 +1,7 @@
-// ---------------- Firebase Imports ----------------
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword 
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 import { app } from "./firebase.js";
@@ -10,47 +9,43 @@ import { app } from "./firebase.js";
 const auth = getAuth(app);
 
 // ---------------- Signup ----------------
-async function signup() {
+window.signup = async function () {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const msg = document.getElementById("msg");
 
     try {
         await createUserWithEmailAndPassword(auth, email, password);
-        msg.textContent = "Signup successful! Redirecting...";
+        msg.innerText = "Signup successful! Redirecting...";
         msg.style.color = "green";
 
         setTimeout(() => {
-            window.location.href = "login.html";  // <--- REDIRECT WORKS NOW
-        }, 1200);
+            window.location.href = "login.html";
+        }, 1500);
 
     } catch (error) {
-        msg.textContent = error.message;
+        msg.innerText = error.message;
         msg.style.color = "red";
     }
-}
+};
 
 // ---------------- Login ----------------
-async function login() {
+window.login = async function () {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const msg = document.getElementById("msg");
 
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        msg.textContent = "Login successful! Redirecting...";
+        msg.innerText = "Login successful! Redirecting...";
         msg.style.color = "green";
 
         setTimeout(() => {
-            window.location.href = "student-dashboard.html";  // OR teacher-dashboard.html
-        }, 1200);
+            window.location.href = "student-dashboard.html";  
+        }, 1500);
 
     } catch (error) {
-        msg.textContent = error.message;
+        msg.innerText = error.message;
         msg.style.color = "red";
     }
-}
-
-// Make functions available to HTML
-window.signup = signup;
-window.login = login;
+};
