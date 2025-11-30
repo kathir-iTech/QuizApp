@@ -1,51 +1,53 @@
+import { auth } from "./firebase.js";
 import {
-    getAuth,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/9.6.11/firebase-auth.js";
 
-import { app } from "./firebase.js";
+// ---- ROLE CHECK FUNCTION ----
+function isTeacher(email) {
+    return email.endsWith("@psgitech.ac.in");
+}
 
-const auth = getAuth(app);
+// ---- SIGNUP ----
+export function signup() {
+    let email = document.getElementById("email").value;
+    let pass = document.getElementById("password").value;
 
-// ---------------- Signup ----------------
-window.signup = async function () {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const msg = document.getElementById("msg");
+    createUserWithEmailAndPassword(auth, email, pass)
+        .then(() => {
+            document.getElementById("msg").innerHTML = "Signup successful!";
 
-    try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        msg.innerText = "Signup successful! Redirecting...";
-        msg.style.color = "green";
+            if (isTeacher(email)) {
+                window.location.href = "teacher-dashboard.html";
+            } else {
+                window.location.href = "student-dashboard.html";
+            }
+        })
+        .catch(err => {
+            document.getElementById("msg").innerHTML = err.message;
+        });
+}
 
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 1500);
+// ---- LOGIN ----
+export function login() {
+    let email = document.getElementById("email").value;
+    let pass = document.getElementById("password").value;
 
-    } catch (error) {
-        msg.innerText = error.message;
-        msg.style.color = "red";
-    }
-};
+    signInWithEmailAndPassword(auth, email, pass)
+        .then(() => {
+            document.getElementById("msg").innerHTML = "Login successful!";
 
-// ---------------- Login ----------------
-window.login = async function () {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const msg = document.getElementById("msg");
+            if (isTeacher(email)) {
+                window.location.href = "teacher-dashboard.html";
+            } else {
+                window.location.href = "student-dashboard.html";
+            }
+        })
+        .catch(err => {
+            document.getElementById("msg").innerHTML = err.message;
+        });
+}
 
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-        msg.innerText = "Login successful! Redirecting...";
-        msg.style.color = "green";
-
-        setTimeout(() => {
-            window.location.href = "student-dashboard.html";  
-        }, 1500);
-
-    } catch (error) {
-        msg.innerText = error.message;
-        msg.style.color = "red";
-    }
-};
+window.signup = signup;
+window.login = login;
