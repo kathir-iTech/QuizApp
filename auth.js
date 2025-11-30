@@ -28,3 +28,6 @@ export function login() {
     })
     .catch(err => msg.innerHTML = err.message);
 }
+
+window.signup = signup;
+window.login = login;
