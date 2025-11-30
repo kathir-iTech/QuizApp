@@ -1,33 +1,56 @@
-import { auth } from "./firebase.js";
+// ---------------- Firebase Imports ----------------
 import { 
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword 
-} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const msg = document.getElementById("msg");
+import { app } from "./firebase.js";
 
-export function signup() {
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
+const auth = getAuth(app);
 
-  createUserWithEmailAndPassword(auth, email, pass)
-    .then(() => {
-      msg.innerHTML = "Signup successful!";
-    })
-    .catch(err => msg.innerHTML = err.message);
+// ---------------- Signup ----------------
+async function signup() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
+
+    try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        msg.textContent = "Signup successful! Redirecting...";
+        msg.style.color = "green";
+
+        setTimeout(() => {
+            window.location.href = "login.html";  // <--- REDIRECT WORKS NOW
+        }, 1200);
+
+    } catch (error) {
+        msg.textContent = error.message;
+        msg.style.color = "red";
+    }
 }
 
-export function login() {
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
+// ---------------- Login ----------------
+async function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
 
-  signInWithEmailAndPassword(auth, email, pass)
-    .then(() => {
-      msg.innerHTML = "Login successful!";
-      window.location.href = "student-dashboard.html";
-    })
-    .catch(err => msg.innerHTML = err.message);
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        msg.textContent = "Login successful! Redirecting...";
+        msg.style.color = "green";
+
+        setTimeout(() => {
+            window.location.href = "student-dashboard.html";  // OR teacher-dashboard.html
+        }, 1200);
+
+    } catch (error) {
+        msg.textContent = error.message;
+        msg.style.color = "red";
+    }
 }
 
+// Make functions available to HTML
 window.signup = signup;
 window.login = login;
